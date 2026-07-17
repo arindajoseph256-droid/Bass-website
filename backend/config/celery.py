@@ -2,7 +2,7 @@ import os
 from celery import Celery
 from celery.schedules import crontab
 
-os.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 
 app = Celery("edushare")
 app.config_from_object("django.conf:settings", namespace="CELERY")

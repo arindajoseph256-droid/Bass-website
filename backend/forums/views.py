@@ -8,7 +8,7 @@ from common.paginations import StandardResultsSetPagination
 from common.permissions import IsModeratorUser
 from .models import Forum, Topic, Post, Reply, Like, Report
 from .serializers import (
-    ForumSerializer, TopicSerializer, TopicDetailSerializer,
+    ForumSerializer, TopicListSerializer, TopicDetailSerializer,
     PostSerializer, ReplySerializer, ReportSerializer,
 )
 
@@ -30,7 +30,7 @@ class ForumViewSet(viewsets.ModelViewSet):
 class TopicViewSet(viewsets.ModelViewSet):
     """ViewSet for forum topics."""
 
-    serializer_class = TopicSerializer
+    serializer_class = TopicListSerializer
     permission_classes = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
 
@@ -44,7 +44,7 @@ class TopicViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == "retrieve":
             return TopicDetailSerializer
-        return TopicSerializer
+        return TopicListSerializer
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()

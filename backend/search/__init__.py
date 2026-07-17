@@ -1,1 +1,1 @@
-default_app_config = "$app.apps.$(echo $app | sed 's/.*/\u&/' | sed 's/_//g')Config"
+default_app_config = "search.apps.SearchConfig"

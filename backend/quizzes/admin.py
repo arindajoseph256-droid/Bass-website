@@ -54,7 +54,7 @@ class QuizAttemptAdmin(admin.ModelAdmin):
     ]
     list_filter = ["status", "is_passed", "started_at"]
     search_fields = ["quiz__title", "student__email"]
-    raw_id_fields = ["quiz", "student", "graded_by"]
+    raw_id_fields = ["quiz", "student"]
     date_hierarchy = "started_at"
 
 

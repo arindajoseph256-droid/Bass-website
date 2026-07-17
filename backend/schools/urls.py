@@ -4,8 +4,8 @@ from .views import SchoolViewSet, SchoolMembershipViewSet
 
 router = DefaultRouter()
 router.register("schools", SchoolViewSet, basename="school")
+router.register("memberships", SchoolMembershipViewSet, basename="school-membership")
 
 urlpatterns = [
     path("", include(router.urls)),
-    path("schools/<int:school_id>/memberships/", SchoolMembershipViewSet.as_view(), name="school-memberships"),
 ]
