@@ -1,0 +1,19 @@
+FROM nginx:alpine
+
+# Remove default nginx configuration
+RUN rm /etc/nginx/nginx.conf
+
+# Copy nginx configuration
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Create directories for static files
+RUN mkdir -p /var/www/edushare/static/css \
+             /var/www/edushare/static/js \
+             /var/www/edushare/static/fonts \
+             /var/www/media \
+             /var/www/static \
+             /etc/nginx/ssl
+
+EXPOSE 80 443
+
+CMD ["nginx", "-g", "daemon off;"]
