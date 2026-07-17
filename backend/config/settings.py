@@ -9,11 +9,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
-SECRET_KEY = env("SECRET_KEY", default="django-insecure-dev-key-change-in-production-xyz123")
+SECRET_KEY = env("SECRET_KEY", default=None)
+if SECRET_KEY is None:
+    raise ValueError("SECRET_KEY environment variable must be set")
 
-DEBUG = env.bool("DEBUG", default=True)
+DEBUG = env.bool("DEBUG", default=False)
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1", "0.0.0.0"])
+
+FRONTEND_URL = env("FRONTEND_URL", default="http://localhost:3000")
 
 # Application definition
 DJANGO_APPS = [

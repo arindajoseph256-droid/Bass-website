@@ -162,9 +162,9 @@ class QuizViewSet(viewsets.ModelViewSet):
                 correct_count += 1
             elif student_answer.points_earned > 0:
                 wrong_count += 1
+            elif not answer_data.get("selected_answers") and not answer_data.get("text_answer"):
+                skipped += 1
             else:
-                if not answer_data.get("selected_answers") and not answer_data.get("text_answer"):
-                    skipped += 1
                 wrong_count += 1
             
             student_answer.save()

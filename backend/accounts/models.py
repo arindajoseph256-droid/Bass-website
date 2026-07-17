@@ -181,7 +181,13 @@ class User(AbstractUser):
 
     def save(self, *args, **kwargs):
         if not self.username:
-            self.username = self.email.split("@")[0]
+            base_username = self.email.split("@")[0]
+            unique_username = base_username
+            counter = 1
+            while User.objects.filter(username=unique_username).exclude(pk=self.pk).exists():
+                unique_username = f"{base_username}{counter}"
+                counter += 1
+            self.username = unique_username
         super().save(*args, **kwargs)
 
 

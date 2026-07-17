@@ -3,6 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 import time
 
 from common.paginations import StandardResultsSetPagination
@@ -187,9 +188,9 @@ class AIGeneratorView(generics.GenericAPIView):
                 "error": f"Unknown action: {action}",
             }, status=status.HTTP_404_NOT_FOUND)
         
-        return handlers[action](request, provider)
+        return handlers[action](request, provider, start_time)
 
-    def _generate_questions(self, request, provider):
+    def _generate_questions(self, request, provider, start_time):
         serializer = GenerateQuestionsSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         
@@ -199,7 +200,7 @@ class AIGeneratorView(generics.GenericAPIView):
         
         try:
             questions = provider.generate_questions(topic, count, question_type)
-            response_time = int((time.time() - time.time()) * 1000)
+            response_time = int((time.time() - start_time) * 1000)
             
             # Save generated content
             course_id = serializer.validated_data.get("course_id")
@@ -232,7 +233,7 @@ class AIGeneratorView(generics.GenericAPIView):
                 "error": str(e),
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def _generate_flashcards(self, request, provider):
+    def _generate_flashcards(self, request, provider, start_time):
         serializer = GenerateFlashcardsSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         
@@ -266,7 +267,7 @@ class AIGeneratorView(generics.GenericAPIView):
                 "error": str(e),
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def _summarize(self, request, provider):
+    def _summarize(self, request, provider, start_time):
         serializer = SummarizeTextSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         
@@ -300,7 +301,7 @@ class AIGeneratorView(generics.GenericAPIView):
                 "error": str(e),
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def _explain(self, request, provider):
+    def _explain(self, request, provider, start_time):
         serializer = ExplainTopicSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         
@@ -322,7 +323,7 @@ class AIGeneratorView(generics.GenericAPIView):
                 "error": str(e),
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def _grammar_check(self, request, provider):
+    def _grammar_check(self, request, provider, start_time):
         serializer = GrammarCheckSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         
@@ -342,7 +343,7 @@ class AIGeneratorView(generics.GenericAPIView):
                 "error": str(e),
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def _study_plan(self, request, provider):
+    def _study_plan(self, request, provider, start_time):
         serializer = StudyPlanSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         

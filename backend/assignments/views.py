@@ -163,16 +163,17 @@ class SubmissionViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         
         submission.score = serializer.validated_data["score"]
-        submission.percentage = (submission.score / submission.assignment.max_score) * 100
         submission.feedback = serializer.validated_data.get("feedback", "")
         submission.status = serializer.validated_data["status"]
         submission.graded_by = request.user
         submission.graded_at = timezone.now()
-        submission.is_passed = submission.score >= submission.assignment.passing_score
         
-        # Apply late penalty
+        # Apply late penalty first, then derive percentage and is_passed
         if submission.late_submission:
             submission.score = submission.calculate_score()
+        
+        submission.percentage = (submission.score / submission.assignment.max_score) * 100
+        submission.is_passed = submission.score >= submission.assignment.passing_score
         
         submission.save()
         

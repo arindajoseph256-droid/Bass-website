@@ -1,4 +1,4 @@
-from rest_framework import viewsets, generics, status
+from rest_framework import viewsets, generics, status, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -8,6 +8,7 @@ from django.utils import timezone
 
 from common.paginations import StandardResultsSetPagination
 from common.permissions import IsTeacherOrAdmin, IsStudentUser
+from lessons.models import Lesson
 from .models import (
     Category, Tag, Course, CourseReview,
     Enrollment, Wishlist, Bookmark,
@@ -82,8 +83,6 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        instance.total_students += 1
-        instance.save(update_fields=["total_students"])
         serializer = self.get_serializer(instance)
         return Response({
             "success": True,

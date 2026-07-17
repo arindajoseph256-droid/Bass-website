@@ -46,7 +46,7 @@ def send_notification(user_id, notification_type, title, message, link=""):
                 notification_type == "achievement" and settings.email_achievements
             )
             
-            if should_email and settings.email_notifications:
+            if should_email and user.email_notifications:
                 notification.is_email_sent = True
                 notification.save()
                 # Email sending would be handled here

@@ -1,7 +1,7 @@
 from rest_framework import status, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
 from django.contrib.auth import get_user_model
@@ -332,6 +332,6 @@ class UserListView(generics.ListAPIView):
 
     queryset = User.objects.filter(is_active=True)
     serializer_class = UserMinimalSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminUser]
     filterset_fields = ["role", "is_verified"]
     search_fields = ["email", "first_name", "last_name", "username"]
